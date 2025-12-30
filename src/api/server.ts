@@ -17,6 +17,12 @@ export class AgentServer {
         this.app.use(cors());
         this.app.use(express.json());
 
+        // Request Logger Middleware
+        this.app.use((req, res, next) => {
+            console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+            next();
+        });
+
         this.walletService = new WalletService();
         this.auditService = new AuditService();
         this.transactionService = new TransactionService(this.walletService, this.auditService);
@@ -29,6 +35,22 @@ export class AgentServer {
     }
 
     private setupRoutes() {
+        // Root Route - API Status
+        this.app.get('/', (req: Request, res: Response) => {
+            res.json({
+                status: 'running',
+                service: 'Agent Wallet Interface',
+                version: '1.0.0',
+                endpoints: [
+                    'GET /agent/address',
+                    'GET /agent/balance',
+                    'POST /agent/transfer',
+                    'POST /agent/wrap',
+                    'POST /agent/unwrap'
+                ]
+            });
+        });
+
         // GET /agent/address
         this.app.get('/agent/address', async (req: Request, res: Response) => {
             try {
