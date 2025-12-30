@@ -7,19 +7,18 @@ Built on the principles of the **Agentic Web**, this wallet serves as the bridge
 ## 🎯 Project Scope
 
 The primary goal is to provide a "Bank Account for Bots" that is:
-- **Secure:** Hardened key management using AES-256 encryption.
-- **Programmable:** Local API server for agents to request onchain actions.
-- **Auditable:** Persistent SQLite-based logging of every decision and transaction.
+- **Secure:** Military-grade key management using Argon2id KDF and XSalsa20-Poly1305 encryption via libsodium.
+- **Programmable:** Local REST API server for agents to request onchain actions.
+- **Auditable:** Persistent SQLite-based logging of every decision and transaction with a state machine (PENDING -> SUCCESS/FAILED).
 - **EVM-Native:** Initial focus on **Base** (EVM) for low-cost, high-speed execution.
 
 ## 🚀 Key Features
 
-- **Encrypted Key Management:** Secure generation and local storage of private keys.
-- **Real-time Asset Tracking:** Monitor native ETH and ERC-20 balances.
+- **Advanced Cryptography:** Argon2id (memory-hard KDF) and authenticated encryption to protect private keys.
+- **Real-time Asset Tracking:** Monitor native ETH and ERC-20 balances via API.
 - **Programmatic Signing:** REST API for agents to transfer funds and interact with contracts.
-- **DeFi Ready:** Built-in support for basic DeFi protocols (e.g., WETH wrapping/unwrapping).
-- **Intelligent Gas Logic:** Automatic gas estimation and optimization for agentic speed.
-- **Comprehensive Auditing:** Every transaction is logged with its intent and outcome.
+- **Audit System:** Integrated SQLite database (`agent_wallet.db`) tracking all lifecycle events.
+- **EVM-Compatible:** Built-in support for Base Sepolia and other EVM chains.
 
 ## 🛠 Tech Stack
 
@@ -27,7 +26,7 @@ The primary goal is to provide a "Bank Account for Bots" that is:
 - **Language:** TypeScript
 - **Blockchain:** Viem (EVM interaction)
 - **Database:** Better-SQLite3 (Audit logs)
-- **CLI:** Commander.js
+- **Encryption:** libsodium-wrappers, argon2
 - **API:** Express.js
 
 ## 📦 Installation
@@ -39,7 +38,7 @@ The primary goal is to provide a "Bank Account for Bots" that is:
 ### Setup
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-repo/agent-wallet.git
+   git clone https://github.com/amerigodot/WalletAgent.git
    cd agent-wallet
    ```
 
@@ -52,34 +51,37 @@ The primary goal is to provide a "Bank Account for Bots" that is:
    Create a `.env` file in the root directory:
    ```env
    RPC_URL=https://sepolia.base.org
-   ENCRYPTION_KEY=your-secure-passphrase-here
    PORT=3000
-   ```
-
-4. **Initialize Wallet:**
-   ```bash
-   npm run wallet -- setup
    ```
 
 ## 📖 Usage
 
-### CLI Commands
-- `npm run wallet -- setup`: Generate a new encrypted wallet.
-- `npm run wallet -- balance`: Show current wallet assets.
-- `npm run wallet -- audit`: Display recent transaction history.
-
-### Agent API (Server Mode)
-Start the server to allow your AI agent to interact with the wallet:
+### Starting the Wallet
+Run the following command to start the secure environment:
 ```bash
-npm run start:server
+npm start
+```
+- If it's your first time, you will be prompted to set a password and a new wallet will be generated.
+- If a wallet exists, you must provide your password to unlock the agent interface.
+
+### Agent API
+Once the wallet is unlocked, the server exposes the machine-readable interface at `http://localhost:3000/agent/`.
+
+**Check Balance:**
+```bash
+curl http://localhost:3000/agent/balance
 ```
 
-**Example API Call (Transfer):**
+**Execute Transfer:**
 ```bash
-curl -X POST http://localhost:3000/api/transfer \
+curl -X POST http://localhost:3000/agent/transfer \
   -H "Content-Type: application/json" \
   -d '{"to": "0x...", "amount": "0.01"}'
 ```
+
+## 🔐 Privacy & Security
+This project follows the **Privacy-First Agent Wallet** specification, ensuring end-to-end encryption for all sensitive state and anonymous execution capabilities.
+
 
 ## 🤝 Contribution Guidelines
 

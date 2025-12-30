@@ -4,3 +4,4 @@ dist
 agent_wallet.db
 keystore.json
 *.log
+.DS_Store
