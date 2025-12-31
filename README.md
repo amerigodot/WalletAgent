@@ -54,6 +54,10 @@ The primary goal is to provide a "Bank Account for Bots" that is:
    PORT=3000
    ```
 
+## 📚 Documentation
+
+For detailed instructions on setup, backup/restore, and usage, please refer to the **[User & Agent Guide](USER_GUIDE.md)**.
+
 ## 📖 Usage
 
 ### Starting the Wallet
