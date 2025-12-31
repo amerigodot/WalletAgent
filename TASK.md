@@ -26,11 +26,18 @@
 ### Detailed Steps
 1.  **Scaffold Project:** [Completed] Initialize `frontend` directory with **Vite**, **React**, and **TypeScript**.
 2.  **Network Setup:** [Completed] Configure Vite proxy to route `/agent` requests to the backend server to avoid CORS issues.
-3.  **Component Implementation:**
+3.  **Component Implementation:** [Completed]
     - **Dashboard:** Real-time view of ETH/WETH balances and connection status.
     - **Action Panel:** Forms for Transfer (with validation), Wrap, and Unwrap operations.
     - **Audit Log:** Scrollable, auto-updating feed of the `audit_log` events.
-4.  **Styling & UX:** Implement **Material Design** principles using a library like `MUI` or `react-bootstrap`.
+4.  **Styling & UX:** [Completed] Implement **Material Design** principles using Tailwind CSS.
+5.  **Testing Strategy:** [Completed] Set up **Vitest** for unit testing and **Playwright** for E2E testing.
+
+## Audit Log
+- **2025-12-31:** Backend API implementation completed (secure storage, audit logs).
+- **2025-12-31:** Frontend scaffolding and component implementation completed.
+- **2025-12-31:** Testing suite (Vitest + Playwright) configured and passing.
+
 5.  **Testing Strategy:** Set up **Vitest** for unit testing and **Playwright** for E2E testing.
 
 ### Audit Criteria
