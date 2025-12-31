@@ -1,5 +1,6 @@
 import { Dashboard } from './components/Dashboard';
 import { ActionPanel } from './components/ActionPanel';
+import { AuditFeed } from './components/AuditFeed';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <main className="space-y-6">
           <Dashboard />
           <ActionPanel />
+          <AuditFeed />
         </main>
 
         <footer className="mt-12 text-center text-sm text-gray-500">

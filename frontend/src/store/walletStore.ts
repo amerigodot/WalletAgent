@@ -5,6 +5,7 @@ interface WalletState {
     address: string | null;
     balance: string | null;
     currency: string;
+    auditLogs: any[];
     isLoading: boolean;
     error: string | null;
 
@@ -17,20 +18,23 @@ export const useWalletStore = create<WalletState>((set, get) => ({
     address: null,
     balance: null,
     currency: 'ETH',
+    auditLogs: [],
     isLoading: false,
     error: null,
 
     fetchWalletData: async () => {
         set({ isLoading: true, error: null });
         try {
-            const [addressData, balanceData] = await Promise.all([
+            const [addressData, balanceData, logsData] = await Promise.all([
                 walletApi.getAddress(),
-                walletApi.getBalance()
+                walletApi.getBalance(),
+                walletApi.getAuditLogs()
             ]);
             set({ 
                 address: addressData.address, 
                 balance: balanceData.balance,
                 currency: balanceData.currency,
+                auditLogs: logsData.logs,
                 isLoading: false 
             });
         } catch (error: any) {

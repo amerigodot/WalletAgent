@@ -32,5 +32,10 @@ export const walletApi = {
     unwrapETH: async (amount: string): Promise<TransactionResponse> => {
         const response = await api.post<TransactionResponse>('/unwrap', { amount });
         return response.data;
+    },
+
+    getAuditLogs: async (): Promise<{ logs: any[] }> => {
+        const response = await api.get<{ logs: any[] }>('/audit');
+        return response.data;
     }
 };

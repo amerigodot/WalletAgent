@@ -103,6 +103,17 @@ export class AgentServer {
         this.app.post('/agent/unwrap', async (req: Request, res: Response) => {
              res.status(501).json({ error: 'Not implemented' });
         });
+
+        // GET /agent/audit
+        this.app.get('/agent/audit', (req: Request, res: Response) => {
+            try {
+                if (!this.walletPassword) throw new Error('Wallet locked');
+                const logs = this.auditService.getRecentLogs(50);
+                res.json({ logs });
+            } catch (error: any) {
+                res.status(500).json({ error: error.message });
+            }
+        });
     }
 
     public start() {
