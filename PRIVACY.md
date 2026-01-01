@@ -1,9 +1,11 @@
 # Privacy-First Agent Wallet: Design Specification
 
 ## Overview
+
 This specification defines a privacy-centric variation of the Agent Wallet, focusing on end-to-end encryption (E2EE) and decentralized architecture to ensure agent sovereignty and user anonymity.
 
 ## Key Features
+
 - **End-to-End Encryption:** All communication and sensitive data are encrypted using state-of-the-art cryptographic primitives.
 - **Decentralized Identity (DID):** Utilizes DID schemas for verifiable, self-sovereign agent identities.
 - **Secure Key Management:** Advanced derivation and storage logic with hardware-security-module (HSM) compatibility.
@@ -12,12 +14,14 @@ This specification defines a privacy-centric variation of the Agent Wallet, focu
 - **Multi-Platform Support:** Portable architecture via WASM for web, mobile, and desktop integration.
 
 ## Technical Stack
+
 - **Core Logic:** Rust
 - **Cryptography:** libsodium
 - **Storage/Distribution:** IPFS (InterPlanetary File System)
 - **Runtime:** WebAssembly (WASM) for cross-platform execution.
 
 ## Agent Design
+
 - **Autonomous Key Rotation:** Periodic, policy-driven update of cryptographic keys without user intervention.
 - **Proactive Threat Detection:** Heuristic monitoring of transaction patterns to identify and block malicious activity.
 - **Secure Data Partitioning:** Logical separation of sensitive keys and operational data.
@@ -25,6 +29,7 @@ This specification defines a privacy-centric variation of the Agent Wallet, focu
 - **User-Defined Privacy Controls:** Granular settings for data disclosure and anonymity levels.
 
 ## Implementation Details
+
 - **E2EE Protocol Spec:** Implementation of Noise Protocol Framework or similar for all comms.
 - **DID Schema Definition:** Adoption of W3C DID standards for agent identifiers.
 - **Key Derivation Function (KDF):** Implementation of Argon2 via libsodium for robust key stretching.
@@ -35,6 +40,7 @@ This specification defines a privacy-centric variation of the Agent Wallet, focu
 - **Adoption Tracking Mechanism:** Privacy-preserving telemetry to monitor usage without compromising user data.
 
 ## Metrics
+
 - **Transaction Latency:** Target < 200ms overhead for local signing/encryption.
 - **Encryption Overhead:** Memory and CPU utilization delta compared to non-encrypted operations.
 - **User Adoption Rate:** Tracking growth of active DIDs and encrypted sessions.
@@ -55,4 +61,3 @@ To integrate a new autonomous agent with the Privacy-First Wallet:
     - **Execute:** Use `POST /agent/transfer` for value transfer, ensuring all parameters are validated against the internal policy engine.
 
 For detailed answers to common questions, operational protocols, and ethical guidelines, refer to the **[Privacy Wallet FAQ](PRIVACY_FAQ.md)**.
-

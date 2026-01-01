@@ -4,68 +4,69 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { AgentServer } from './api/server';
 import { WalletService } from './services/wallet';
+import { config } from './lib/config';
 
 const WALLET_FILE = path.join(process.cwd(), 'wallet.enc');
 
 async function main() {
-    console.log('🤖 Agent Wallet System Starting...');
-    
-    const walletService = new WalletService();
-    let password = '';
+  console.log('🤖 Agent Wallet System Starting...');
+  console.log(`🛡️  Privacy Mode: ${config.privacy.mode} | Tor: ${config.privacy.enableTor ? 'ON' : 'OFF'}`);
 
-    if (!fs.existsSync(WALLET_FILE)) {
-        console.log('✨ No wallet found. Starting setup...');
-        const answers = await inquirer.prompt([
-            {
-                type: 'password',
-                name: 'password',
-                message: 'Create a strong password for your new agent wallet:',
-                mask: '*'
-            },
-            {
-                type: 'password',
-                name: 'confirm',
-                message: 'Confirm password:',
-                mask: '*'
-            }
-        ]);
+  const walletService = new WalletService();
+  let password = '';
 
-        if (answers.password !== answers.confirm) {
-            console.error('❌ Passwords do not match. Exiting.');
-            process.exit(1);
-        }
+  if (!fs.existsSync(WALLET_FILE)) {
+    console.log('✨ No wallet found. Starting setup...');
+    const answers = await inquirer.prompt([
+      {
+        type: 'password',
+        name: 'password',
+        message: 'Create a strong password for your new agent wallet:',
+        mask: '*',
+      },
+      {
+        type: 'password',
+        name: 'confirm',
+        message: 'Confirm password:',
+        mask: '*',
+      },
+    ]);
 
-        password = answers.password;
-        console.log('🔐 Generating secure keys...');
-        await walletService.createWallet(password);
-        console.log('✅ Wallet created.');
-    } else {
-        console.log('🔓 Wallet detected.');
-        const answers = await inquirer.prompt([
-            {
-                type: 'password',
-                name: 'password',
-                message: 'Enter wallet password to unlock agent interface:',
-                mask: '*'
-            }
-        ]);
-        password = answers.password;
+    if (answers.password !== answers.confirm) {
+      console.error('❌ Passwords do not match. Exiting.');
+      process.exit(1);
     }
 
-    try {
-        // Test unlock
-        const address = await walletService.getAddress(password);
-        console.log(`\n🔑 Wallet Unlocked: ${address}`);
-        
-        // Start Server
-        const server = new AgentServer();
-        server.setPassword(password);
-        server.start();
+    password = answers.password;
+    console.log('🔐 Generating secure keys...');
+    await walletService.createWallet(password);
+    console.log('✅ Wallet created.');
+  } else {
+    console.log('🔓 Wallet detected.');
+    const answers = await inquirer.prompt([
+      {
+        type: 'password',
+        name: 'password',
+        message: 'Enter wallet password to unlock agent interface:',
+        mask: '*',
+      },
+    ]);
+    password = answers.password;
+  }
 
-    } catch (error) {
-        console.error('❌ Failed to unlock wallet. Incorrect password?');
-        process.exit(1);
-    }
+  try {
+    // Test unlock
+    const address = await walletService.getAddress(password);
+    console.log(`\n🔑 Wallet Unlocked: ${address}`);
+
+    // Start Server
+    const server = new AgentServer();
+    server.setPassword(password);
+    server.start();
+  } catch (error) {
+    console.error('❌ Failed to unlock wallet. Incorrect password?');
+    process.exit(1);
+  }
 }
 
 main();

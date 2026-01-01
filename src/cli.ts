@@ -7,10 +7,7 @@ import { db } from './lib/db';
 
 const program = new Command();
 
-program
-  .name('agent-wallet')
-  .description('CLI Agent Wallet for EVM interactions')
-  .version('1.0.0');
+program.name('agent-wallet').description('CLI Agent Wallet for EVM interactions').version('1.0.0');
 
 program
   .command('setup')
@@ -22,8 +19,8 @@ program
           type: 'confirm',
           name: 'overwrite',
           message: 'A keystore already exists. Do you want to overwrite it?',
-          default: false
-        }
+          default: false,
+        },
       ]);
 
       if (!overwrite) {
@@ -37,8 +34,8 @@ program
         type: 'list',
         name: 'mode',
         message: 'How would you like to set up the wallet?',
-        choices: ['Generate New Mnemonic', 'Import Existing Mnemonic']
-      }
+        choices: ['Generate New Mnemonic', 'Import Existing Mnemonic'],
+      },
     ]);
 
     let mnemonic = '';
@@ -55,8 +52,8 @@ program
           type: 'password', // Hide input
           name: 'inputMnemonic',
           message: 'Enter your 12 or 24 word mnemonic:',
-          validate: (input) => bip39.validateMnemonic(input) || 'Invalid mnemonic'
-        }
+          validate: (input) => bip39.validateMnemonic(input) || 'Invalid mnemonic',
+        },
       ]);
       mnemonic = inputMnemonic;
     }
@@ -66,26 +63,31 @@ program
         type: 'password',
         name: 'password',
         message: 'Enter a strong password to encrypt your keystore:',
-        mask: '*'
+        mask: '*',
       },
+    ]);
+
+    const { confirm } = await inquirer.prompt([
       {
         type: 'password',
         name: 'confirm',
         message: 'Confirm password:',
         mask: '*',
-        validate: (input: string, answers: any) => {
-            return input === answers.password || 'Passwords do not match';
-        }
-      }
+      },
     ]);
 
+    if (password !== confirm) {
+      console.error('❌ Passwords do not match. Setup cancelled.');
+      return;
+    }
+
     try {
-        security.saveMnemonic(mnemonic, password);
-        db.log('WALLET_SETUP', { mode }, 'SUCCESS');
-        console.log('\n✅ Wallet successfully set up and encrypted!');
+      security.saveMnemonic(mnemonic, password);
+      db.log('WALLET_SETUP', { mode }, 'SUCCESS');
+      console.log('\n✅ Wallet successfully set up and encrypted!');
     } catch (error: any) {
-        console.error('Failed to save wallet:', error);
-        db.log('WALLET_SETUP', { mode, error: error.message }, 'FAILED');
+      console.error('Failed to save wallet:', error);
+      db.log('WALLET_SETUP', { mode, error: error.message }, 'FAILED');
     }
   });
 
@@ -95,44 +97,44 @@ import { chain } from './lib/chain';
 // ... existing setup command ...
 
 program
-    .command('start')
-    .description('Unlock wallet and start the Agent API server')
-    .option('-p, --port <number>', 'Port to listen on', '3000')
-    .action(async (options) => {
-        if (!security.hasKeystore()) {
-            console.error('❌ No wallet found. Run "setup" first.');
-            process.exit(1);
-        }
+  .command('start')
+  .description('Unlock wallet and start the Agent API server')
+  .option('-p, --port <number>', 'Port to listen on', '3000')
+  .action(async (options) => {
+    if (!security.hasKeystore()) {
+      console.error('❌ No wallet found. Run "setup" first.');
+      process.exit(1);
+    }
 
-        const { password } = await inquirer.prompt([
-            {
-                type: 'password',
-                name: 'password',
-                message: 'Enter wallet password to unlock:',
-                mask: '*'
-            }
-        ]);
+    const { password } = await inquirer.prompt([
+      {
+        type: 'password',
+        name: 'password',
+        message: 'Enter wallet password to unlock:',
+        mask: '*',
+      },
+    ]);
 
-        const mnemonic = security.loadMnemonic(password);
-        if (!mnemonic) {
-            console.error('❌ Incorrect password or corrupted keystore.');
-            process.exit(1);
-        }
+    const mnemonic = security.loadMnemonic(password);
+    if (!mnemonic) {
+      console.error('❌ Incorrect password or corrupted keystore.');
+      process.exit(1);
+    }
 
-        try {
-            chain.unlockWallet(mnemonic);
-            startServer(parseInt(options.port));
-        } catch (error) {
-            console.error('Failed to start:', error);
-        }
-    });
+    try {
+      chain.unlockWallet(mnemonic);
+      startServer(parseInt(options.port));
+    } catch (error) {
+      console.error('Failed to start:', error);
+    }
+  });
 
 program
-    .command('audit')
-    .description('View the local audit log')
-    .action(() => {
-        const logs = db.getLogs();
-        console.table(logs);
-    });
+  .command('audit')
+  .description('View the local audit log')
+  .action(() => {
+    const logs = db.getLogs();
+    console.table(logs);
+  });
 
 program.parse();

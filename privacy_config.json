@@ -1,0 +1,5 @@
+{
+  "useTor": false,
+  "anonymityLevel": "HIGH",
+  "dataRetention": "SESSION"
+}

@@ -7,6 +7,7 @@ Built on the principles of the **Agentic Web**, this wallet serves as the bridge
 ## 🎯 Project Scope
 
 The primary goal is to provide a "Bank Account for Bots" that is:
+
 - **Secure:** Military-grade key management using Argon2id KDF and XSalsa20-Poly1305 encryption via libsodium.
 - **Programmable:** Local REST API server for agents to request onchain actions.
 - **Auditable:** Persistent SQLite-based logging of every decision and transaction with a state machine (PENDING -> SUCCESS/FAILED).
@@ -32,17 +33,21 @@ The primary goal is to provide a "Bank Account for Bots" that is:
 ## 📦 Installation
 
 ### Prerequisites
+
 - Node.js (v18+)
 - npm or pnpm
 
 ### Setup
+
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/amerigodot/WalletAgent.git
    cd agent-wallet
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
@@ -61,22 +66,28 @@ For detailed instructions on setup, backup/restore, and usage, please refer to t
 ## 📖 Usage
 
 ### Starting the Wallet
+
 Run the following command to start the secure environment:
+
 ```bash
 npm start
 ```
+
 - If it's your first time, you will be prompted to set a password and a new wallet will be generated.
 - If a wallet exists, you must provide your password to unlock the agent interface.
 
 ### Agent API
+
 Once the wallet is unlocked, the server exposes the machine-readable interface at `http://localhost:3000/agent/`.
 
 **Check Balance:**
+
 ```bash
 curl http://localhost:3000/agent/balance
 ```
 
 **Execute Transfer:**
+
 ```bash
 curl -X POST http://localhost:3000/agent/transfer \
   -H "Content-Type: application/json" \
@@ -84,12 +95,13 @@ curl -X POST http://localhost:3000/agent/transfer \
 ```
 
 ## 🔐 Privacy & Security
-This project follows the **Privacy-First Agent Wallet** specification, ensuring end-to-end encryption for all sensitive state and anonymous execution capabilities.
 
+This project follows the **Privacy-First Agent Wallet** specification, ensuring end-to-end encryption for all sensitive state and anonymous execution capabilities.
 
 ## 🤝 Contribution Guidelines
 
 We welcome contributions to the Agentic Web!
+
 1. Fork the Project.
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
@@ -97,4 +109,5 @@ We welcome contributions to the Agentic Web!
 5. Open a Pull Request.
 
 ---
-*Built for the rise of Onchain AI Agents.*
+
+_Built for the rise of Onchain AI Agents._

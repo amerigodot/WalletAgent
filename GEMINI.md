@@ -1,3 +1,31 @@
+🧠 Explicit Memory Block: Agent Wallet Protocol
+Project Definition Agent Wallet is a secure, programmable infrastructure designed as a "Bank Account for Bots." It serves as a bridge between AI logic and decentralized finance (DeFi), operating on the EVM (Base Sepolia) with a focus on autonomous agent sovereignty.
+
+Core Architecture
+
+Local-First & Encrypted: Uses Argon2id (KDF) and XSalsa20-Poly1305 (via libsodium) to encrypt private keys at rest (wallet.enc). No central server; keys never leave the local environment.
+Programmable Interface: Exposes a local REST API (http://localhost:3000) for agents to check identity, track assets, and sign transactions programmatically.
+Auditable State: Maintains a persistent SQLite database (agent_wallet.db) logging all lifecycle events, decisions, and transaction outcomes (PENDING -> SUCCESS/FAILED).
+Privacy Specifications (The "Privacy-First" Standard)
+
+End-to-End Encryption (E2EE): All agent-to-agent and agent-to-human communications are encrypted.
+Decentralized Identity (DID): Agents utilize self-sovereign identities to remain verifiable but unlinkable to human operators without consent.
+Traffic Obfuscation: Mandates the use of Tor/I2P proxying to resist traffic analysis and IP tracking.
+Data Minimization: "Ephemeral by default" data handling—sensitive inputs are processed in memory and overwritten immediately.
+Operational Guidelines
+
+Initialization: Wallet is created via CLI (npm start) with a strong password. This password unlocks the API for the session.
+Agent Interaction:
+Verify: GET /agent/address (Confirms unlock status & identity).
+Execute: POST /agent/transfer (Signs & broadcasts transactions).
+Audit: GET /agent/audit (Polls for transaction confirmation).
+Human Supervision: A React-based Dashboard (http://localhost:5173) provides a "Human-in-the-Loop" view for monitoring balances and intervening if necessary.
+Security Protocols
+
+Key Isolation: Private keys are never exposed in logs or API responses.
+Sanctions Screening: Agents perform local checks against sanctions lists to ensure compliance without leaking intent.
+Compliance: Supports "Selective Disclosure" via view keys for regulatory auditing while maintaining public anonymity.
+
 # Agent Wallet - Research Context
 
 ## Directory Overview
